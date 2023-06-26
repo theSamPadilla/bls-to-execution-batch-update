@@ -38,8 +38,7 @@ def main():
     validator_indexes_to_withdrawal_credentials = {}
 
     for i in validator_public_keys_to_indexes.values():
-        if beacon_api_key:
-            response = requests.get(f"{beacon_endpoint}/eth/v1/beacon/states/head/validators/{i}?key={beacon_api_key}")
+        response = requests.get(f"{beacon_endpoint}/eth/v1/beacon/states/head/validators/{i}?key={beacon_api_key}")
         if response.status_code != 200:
             print(f"\n\n[FATAL] API Request to beacon node failed with code {response.status_code}. Try again later.")
             print(response.text)
