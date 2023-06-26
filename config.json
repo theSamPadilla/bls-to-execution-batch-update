@@ -1,6 +1,7 @@
 {
     "network": "<network>",
-    "eth1-address": "<address>",
+    "eth1-deposit-address": "<deposit-address>",
+    "eth1-withdrawal-address": "<withdrawal-address>",
     "beacon-api-endpoint": "<beacon-endpoint>",
     "beacon-api-key": "<parameter key if any>",
     "beaconcha-in-api-key": "<beaconcha.in api key>",
