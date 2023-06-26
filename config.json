@@ -1,0 +1,8 @@
+{
+    "network": "<network>",
+    "eth1-address": "<address>",
+    "beacon-api-endpoint": "<beacon-endpoint>",
+    "beacon-api-key": "<parameter key if any>",
+    "beaconcha-in-api-key": "<beaconcha.in api key>",
+    "starting-index": 0
+}
