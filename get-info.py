@@ -6,7 +6,8 @@ def main():
         buff = json.load(f)
         network = buff["network"]
         starting_index = buff["starting-index"]
-        address = buff["eth1-address"]
+        deposit_address = buff["eth1-deposit-address"]
+        withdrawal_address = buff["eth1-withdrawal-address"]
         beacon_endpoint = buff["beacon-api-endpoint"]
         beacon_api_key = buff["beacon-api-key"]
         beaconcha_in_api_key = buff["beaconcha-in-api-key"]
@@ -19,7 +20,7 @@ def main():
         beaconcha_in_endpoint = "https://beaconcha.in"
  
     #Get validator related to address /api/v1/validator/eth1/{eth1address}
-    response = requests.get(f"{beaconcha_in_endpoint}/api/v1/validator/eth1/{address}?apikey={beaconcha_in_api_key}")
+    response = requests.get(f"{beaconcha_in_endpoint}/api/v1/validator/eth1/{deposit_address}?apikey={beaconcha_in_api_key}")
     
     #Fail missed requests gracefully
     if response.status_code != 200:
@@ -54,12 +55,13 @@ def main():
     print(", ".join([str(i) for i in validator_indexes_to_withdrawal_credentials.keys()]))
     print(", ".join(validator_indexes_to_withdrawal_credentials.values()))
 
-    #Ouput how many 0x00 credentials found for {address} and the chain
+    #Ouput how many 0x00 credentials found for {address}, network, and starting index
     print(len(validator_indexes_to_withdrawal_credentials))
-    print(address)
+    print(deposit_address)
     print(network)
     print(starting_index)
-
+    print(withdrawal_address)
+    
     return
 
 if __name__ == "__main__":
