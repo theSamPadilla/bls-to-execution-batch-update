@@ -55,6 +55,28 @@ Alternatively, you can also run the python script to get the info you need and i
 python3 get-info.py
 ```
 
+#### 5. Finish the process by interacting with the deposit CLI
+After running the script above, you will be prompted to re-enter the `withdrawal-address` set in the `config.json`. Take this moment to **triple-check you have full control over this address**.
+
+Finally, you will be prompted to enter your `mnemonic phrase` that was generated when you first created the validator keys.
+
+**NOTE:** You are interacting here directly with the `deposit-cli`, not with any of the code in this repo.
+
+#### 6. Upload the bls_to_execution_changes-*.json file to your beacon node.
+If everything is succesful, a `bls_to_execution_changes-*.json` file will be generated in the `./bls_to_execution_changes` directory.
+
+To upload this to your beacon node and complete the process, run:
+```
+curl -X POST -H “Content-type: application/json” -d @<path-to-bls_to_execution_changes-*.json> \
+http://<BEACON_NODE_HTTP_API_URL>/eth/v1/beacon/pool/bls_to_execution_changes
+```
+
+Make sure to replace:
+- `<path-to-bls_to_execution_changes-*.json>` with the proper path to the `.json` file.
+- `<BEACON_NODE_HTTP_API_URL>` with your chosen beacon api endpoint. The same you defined in the config file should work.
+
+---
+
 ## How it works
 The `get-info.py` file makes a request to the `beaconcha.in` API to get all the validator indices funded by the `deposit-address`.
 

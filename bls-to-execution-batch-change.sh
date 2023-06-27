@@ -1,6 +1,6 @@
 #!/bin/bash
 #Execute python get-info.py script and capture the output
-echo "Running `get-info.py`..."
+echo "Running get-info.py..."
 output=$(python3 ./get-info.py)
 
 # Assign each line of output to respective variables
