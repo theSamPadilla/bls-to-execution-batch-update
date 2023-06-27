@@ -1,13 +1,13 @@
 # Batch bls-to-execution-change
-Every pre-merge validator has to update their ehtereum withdrawal credentials at some point by following the instructions on (Ethereum launchpad)[https://launchpad.ethereum.org/en/btec/].
+Every pre-merge validator has to update their ehtereum withdrawal credentials at some point by following the instructions on the [Ethereum launchpad](https://launchpad.ethereum.org/en/btec/).
 
-There is a few ways to do that, but the most commond one is using the (`deposit-cli`)[https://github.com/ethereum/staking-deposit-cli/releases/].
+There are a few ways to do this, but the most common one is using the [`deposit-cli`](https://github.com/ethereum/staking-deposit-cli/releases/).
 
-While straight forward, the process can be tedius for node operators running multiple validators on testnet or mainnet. As such, this repo contains a python and bash script to batch update all the credentials associated to a given address.
+While straight forward, the process can be tedius for node operators running multiple validators on testnet or mainnet. For that, this repo contains python and bash scripts to batch update all the credentials associated to a given address.
 
 This repo **does not handle validator keys** and the scripts here **only start the process of generating the `bls_to_execution_changes-*.json` file**, needing still manual confirmation from the user when interacting with the `deposit-cli`.
 
-Running this script **is reversible** and safe. Withdrawal credentials will only be updated once the generated `bls_to_execution_changes-*.json` are submitted to a beacon node.
+Running this script **is reversible** and safe. Withdrawal credentials will only be updated once the generated `bls_to_execution_changes-*.json` is submitted to a beacon node.
 
 ## Setup
 #### 1. Clone the Repo and download python
@@ -16,7 +16,7 @@ To clone the repo:
 git clone https://github.com/theSamPadilla/bls-to-execution-batch-update
 ```
 
-To (download python see these instructions)[https://www.python.org/downloads/].
+To [download python see these instructions](https://www.python.org/downloads/).
 
 #### 2. Add your validator and wallet info to `config.json`.
 ```
@@ -34,12 +34,12 @@ Namely, replace:
 - `<network>` with the network for where you run the validators (mainnet, goerli, etc).
 - `<deposit-address>` with the **eth1 address that performed the deposit for the validators.**
 - `<withdrawal-address>` with the **eth1 address to set as the withdrawal address** (can be the same as the first one).
-- - **NOTE: MAKE SURE YOU HAVE FULL CONTROL TO THIS ADDRESS AS THIS OPERATION CANNOT BE REVERSED**
+- - **NOTE: MAKE SURE YOU HAVE FULL CONTROL OF THIS ADDRESS**
 - `<beacon-endpoint>` with the beacon endpoint for `netowrk`. Make sure this node is synced to the specified network or the process will not work.
 - `<parameter key if any>` with the parameter key for the beacon endpoint, if any.
 - `<beaconcha.in api key>` with your beaconcha.in api key. Free tier should be enough. For information on how to get an API endpoint go to https://beaconcha.in/pricing.
 
-**NOTE: The script assumes that the starting index for your validators according to (EIP-2334)[https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters] is 0 and that all validators have keys are derived from the same mnemonic**. If this is not the case it is not encouraged to use this script.
+**NOTE: The script assumes that the starting index for your validators according to [EIP-2334](https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters) is 0 and that all validators have keys are derived from the same mnemonic**. If this is not the case it is not encouraged to use this script.
 
 #### 3. Download the Ethereum deposit CLI to the same root directory.
 [Official Page](https://github.com/ethereum/staking-deposit-cli/releases/) for the Ethereum CLI at the time of writing.
