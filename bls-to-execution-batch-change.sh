@@ -14,7 +14,9 @@ withdrawal_address=$(echo "$output" | sed -n '7p')
 
 if [[ -n $validator_indices && -n $withdrawal_credentials && -n $number_of_validators && -n $deposit_address && -n $network && -n $index && -n $withdrawal_address ]]; then
     echo "Found $number_of_validators validators on ethereum $network with 0x00 withdrawals."
-    echo "Executing the update at starting index $index..."
+    echo "Executing the update at starting index $index."
+    echo "network = $network"
+    echo "execution_address = $withdrawal_address"
 
     # Deposit command
     ./deposit --language=english generate-bls-to-execution-change \
@@ -22,7 +24,7 @@ if [[ -n $validator_indices && -n $withdrawal_credentials && -n $number_of_valid
     --bls_withdrawal_credentials_list=$withdrawal_credentials \
     --validator_start_index=$index \
     --validator_indices=$validator_indices \
-    --execution_address=$address
+    --execution_address=$withdrawal_address
 
 else
     echo "One or more variables are missing. Cannot proceed."
