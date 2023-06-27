@@ -35,7 +35,7 @@ Namely, replace:
 - `<parameter key if any>` with the parameter key for the beacon endpoint, if any.
 - `<beaconcha.in api key>` with your beaconcha.in api key. Free tier should be enough. For information on how to get an API endpoint go to https://beaconcha.in/pricing.
 
-**NOTE: The script assumes that the starting index for your validators according to (EIP-2334)[https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters] is 0**. If this is not the case it is not encouraged to use this script.
+**NOTE: The script assumes that the starting index for your validators according to (EIP-2334)[https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters] is 0 and that all validators have keys are derived from the same mnemonic**. If this is not the case it is not encouraged to use this script.
 
 #### 3. Download the Ethereum deposit CLI to the same root directory.
 [Official Page](https://github.com/ethereum/staking-deposit-cli/releases/) for the Ethereum CLI at the time of writing.
@@ -67,7 +67,7 @@ If everything is succesful, a `bls_to_execution_changes-*.json` file will be gen
 
 To upload this to your beacon node and complete the process, run:
 ```
-curl -X POST -H “Content-type: application/json” -d @<path-to-bls_to_execution_changes-*.json> \
+curl -X POST -H "Content-type: application/json" -d @<path-to-bls_to_execution_changes-*.json> \
 http://<BEACON_NODE_HTTP_API_URL>/eth/v1/beacon/pool/bls_to_execution_changes
 ```
 
