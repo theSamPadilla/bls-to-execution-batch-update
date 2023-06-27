@@ -5,6 +5,10 @@ There is a few ways to do that, but the most commond one is using the (`deposit-
 
 While straight forward, the process can be tedius for node operators running multiple validators on testnet or mainnet. As such, this repo contains a python and bash script to batch update all the credentials associated to a given address.
 
+This repo **does not handle validator keys** and the scripts here **only start the process of generating the `bls_to_execution_changes-*.json` file**, needing still manual confirmation from the user when interacting with the `deposit-cli`.
+
+Running this script **is reversible** and safe. Withdrawal credentials will only be updated once the generated `bls_to_execution_changes-*.json` are submitted to a beacon node.
+
 ## Setup
 #### 1. Clone the Repo and download python
 To clone the repo:
