@@ -89,11 +89,11 @@ It then gets all the current `0x00` credentials for those validator indices, and
 All this information is used then by the `bls-to-execution-batch-change.sh` script to interact with the deposit.
 
 ## Disclaimer & License
-Although Google is the employer of the author, this is not an officially supported Google product and does not reflect on Google in any ways.
+Although Google is the employer of the author of the repo, this is not an officially supported Google product and does not reflect on Google in any ways.
 
-Nor the author or this repo or its employers shall he held liable for any issues caused by the usage of this code. This include but is not limited to bugs, errors, wrong or outdated inforamtion, or even lost of funds.
+Neither the author of this repo nor its employer shall be held liable for any issues caused by the usage of this code. This includes but is not limited to bugs, errors, wrong or outdated inforamtion, or even lost of funds.
 
-This repo and the code published solely on the basis of good faith as a tool to help developers and should not be used with caution. The user is running this code at its own risk.
+This repo is published solely on the basis of good faith and as a tool to help developers. This code should be used with caution. The user is running this code at its own risk.
 
 Apache Header:
 ```
