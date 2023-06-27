@@ -51,8 +51,8 @@ def main():
             validator_indexes_to_withdrawal_credentials[i] = withdrawal_credentials
 
     #Output Comma separated response
-    print(", ".join([str(i) for i in validator_indexes_to_withdrawal_credentials.keys()]))
-    print(", ".join(validator_indexes_to_withdrawal_credentials.values()))
+    print(",".join([str(i) for i in validator_indexes_to_withdrawal_credentials.keys()]))
+    print(",".join(validator_indexes_to_withdrawal_credentials.values()))
 
     #Ouput how many 0x00 credentials found for {address}, network, and starting index
     print(len(validator_indexes_to_withdrawal_credentials))
