@@ -97,7 +97,7 @@ This repo is published solely on the basis of good faith and as a tool to help d
 
 Apache Header:
 ```
-Copyright 2023 theSamPadilla
+Copyright 2023 [Sam Padilla](https://twitter.com/theSamPadilla)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
