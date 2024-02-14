@@ -1,10 +1,12 @@
-import json, requests
+import json, requests, time
 
 def main():
     #Get configs
     with open('config.json', "r") as f:
         buff = json.load(f)
         network = buff["network"]
+        mode = buff["index-or-deposit"]
+        indexes = buff["indexes"]
         starting_index = buff["starting-index"]
         deposit_address = buff["eth1-deposit-address"]
         withdrawal_address = buff["eth1-withdrawal-address"]
@@ -19,38 +21,91 @@ def main():
     else:
         beaconcha_in_endpoint = "https://beaconcha.in"
  
-    #Get validator related to address /api/v1/validator/eth1/{eth1address}
-    response = requests.get(f"{beaconcha_in_endpoint}/api/v1/validator/eth1/{deposit_address}?apikey={beaconcha_in_api_key}")
-    
-    #Fail missed requests gracefully
-    if response.status_code != 200:
-        print(f"\n\n[FATAL] Beaconcha.in API Request Failed with code {response.status_code}. Try again later.")
-        print(response.text)
-        exit(1)
+    # Split operation based on mode
+    if mode == "index":
+        payload = ""
+        validator_public_keys_to_indexes = {}
+        validator_indexes_to_withdrawal_credentials = {}
+        c = 0
+        for i in range(0, len(indexes)): # pylint: disable=C0200
+            #Can only add 100 indexes per call
+            if i % 100 == 0 and i != 0:
+                # Make the call
+                c += 1
+                response = requests.get(f"{beaconcha_in_endpoint}/api/v1/validator/{payload.strip(',')}?apikey={beaconcha_in_api_key}")
 
-    #Process response
-    buff = json.loads(response.text)["data"]
-    validator_public_keys_to_indexes = {}
-    for validator in buff:
-       validator_public_keys_to_indexes[validator["publickey"]] = validator["validatorindex"]
+                #Fail missed requests gracefully
+                if response.status_code != 200:
+                    print(f"\n\n[FATAL] Beaconcha.in API Request Failed with code {response.status_code}. Try again later.")
+                    print(response.text)
+                    exit(1)
 
-    #Get withdrawal credentials for each validator
-    validator_indexes_to_withdrawal_credentials = {}
+                # Process the call
+                buff = json.loads(response.text)["data"]
+                for validator in buff:
+                    withdrawal_credentials = validator["withdrawalcredentials"]
+                    if withdrawal_credentials[:4] == "0x00": #Check that withdrawal are unset
+                        validator_indexes_to_withdrawal_credentials[validator["validatorindex"]] = withdrawal_credentials
 
-    for i in validator_public_keys_to_indexes.values():
-        response = requests.get(f"{beacon_endpoint}/eth/v1/beacon/states/head/validators/{i}?key={beacon_api_key}")
+                # Reset indexes
+                payload = f"{str(indexes[i])}"
+
+                # Wait to avoid rate limits
+                #print(f"Called {c}/{len(indexes)//100}")
+                time.sleep(5)
+
+            else:
+                payload += f",{str(indexes[i])}"
+
+        # Make the call one more time after breaking
+        response = requests.get(f"{beaconcha_in_endpoint}/api/v1/validator/{payload.strip(',')}?apikey={beaconcha_in_api_key}")
+        #Fail missed requests gracefully
         if response.status_code != 200:
-            print(f"\n\n[FATAL] API Request to beacon node failed with code {response.status_code}. Try again later.")
+            print(f"\n\n[FATAL] Beaconcha.in API Request Failed with code {response.status_code}. Try again later.")
+            print(response.text)
+            exit(1)
+
+        # Process the call
+        buff = json.loads(response.text)["data"]
+        for validator in buff:
+            withdrawal_credentials = validator["withdrawalcredentials"]
+            if withdrawal_credentials[:4] == "0x00": #Check that withdrawal are unset
+                validator_indexes_to_withdrawal_credentials[validator["validatorindex"]] = withdrawal_credentials
+
+    else: 
+        #Get validator related to address /api/v1/validator/eth1/{eth1address}
+        response = requests.get(f"{beaconcha_in_endpoint}/api/v1/validator/eth1/{deposit_address}?apikey={beaconcha_in_api_key}")
+        
+        #Fail missed requests gracefully
+        if response.status_code != 200:
+            print(f"\n\n[FATAL] Beaconcha.in API Request Failed with code {response.status_code}. Try again later.")
             print(response.text)
             exit(1)
 
         #Process response
-        buff = json.loads(response.text)
-        withdrawal_credentials = buff["data"]["validator"]["withdrawal_credentials"]
-        if withdrawal_credentials[:4] == "0x00": #Check that withdrawal are unset
-            validator_indexes_to_withdrawal_credentials[i] = withdrawal_credentials
+        buff = json.loads(response.text)["data"]
+        validator_public_keys_to_indexes = {}
+        for validator in buff:
+            validator_public_keys_to_indexes[validator["publickey"]] = validator["validatorindex"]
+
+            #Get withdrawal credentials for each validator
+            validator_indexes_to_withdrawal_credentials = {}
+
+        for i in validator_public_keys_to_indexes.values():
+            response = requests.get(f"{beacon_endpoint}/eth/v1/beacon/states/head/validators/{i}?key={beacon_api_key}")
+            if response.status_code != 200:
+                print(f"\n\n[FATAL] API Request to beacon node failed with code {response.status_code}. Try again later.")
+                print(response.text)
+                exit(1)
+
+            #Process response
+            buff = json.loads(response.text)
+            withdrawal_credentials = buff["data"]["validator"]["withdrawal_credentials"]
+            if withdrawal_credentials[:4] == "0x00": #Check that withdrawal are unset
+                validator_indexes_to_withdrawal_credentials[i] = withdrawal_credentials
 
     #Output Comma separated response
+    #print (validator_indexes_to_withdrawal_credentials)
     print(",".join([str(i) for i in validator_indexes_to_withdrawal_credentials.keys()]))
     print(",".join(validator_indexes_to_withdrawal_credentials.values()))
 

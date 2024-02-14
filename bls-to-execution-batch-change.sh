@@ -17,6 +17,7 @@ if [[ -n $validator_indices && -n $withdrawal_credentials && -n $number_of_valid
     echo "Executing the update at starting index $index."
     echo "network = $network"
     echo "execution_address = $withdrawal_address"
+    #echo "credentials $withdrawal_credentials"
 
     # Deposit command
     ./deposit --language=english generate-bls-to-execution-change \
